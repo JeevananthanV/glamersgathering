@@ -20,767 +20,9 @@
 
     <!-- FontAwesome for Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
-    <style>
-        /* ==========================================================================
-           1. SETTINGS & VARIABLES (Unified)
-           ========================================================================== */
-        :root {
-            /* ----- USER PROVIDED COLOR PALETTE ----- */
-            --primary-dark: #501122;    /* deep maroon */
-            --primary: #574144;          /* muted mauve */
-            --secondary-light: #bfa5a8;  /* soft dusty rose */
-            --accent-dark: #004a41;      /* deep teal */
-            --accent: #0e7c71;           /* vibrant teal */
-
-            /* ----- NEUTRAL & SEMANTIC COLORS ----- */
-            --ivory: #fffef7;
-            --platinum: #e8e8e8;
-            --charcoal: #2c2c2c;
-            --obsidian: #1a1a1a; /* Used as base black */
-
-            /* ----- USER CSS MAPPINGS (Aliases to match your CSS selectors) ----- */
-            /* We map your 'gg-' prefixed variables to the palette above */
-            --gg-black: #080808;         /* Deep black for backgrounds */
-            --gg-white: var(--ivory);    /* Main text color */
-            
-            --gg-primary: var(--primary);           /* #574144 */
-            --gg-primary-dark: var(--primary-dark); /* #501122 */
-            
-            --gg-secondary: var(--primary);         /* Muted mauve */
-            
-            --gg-accent: var(--accent);             /* #0e7c71 - Teal */
-            --gg-eco-dark: var(--accent-dark);      /* #004a41 */
-            --gg-eco-light: var(--secondary-light); /* #bfa5a8 */
-
-            /* Glass & Surfaces */
-            --gg-glass-border: rgba(87, 65, 68, 0.25);
-            --gg-glass-bg: rgba(255, 255, 255, 0.03);
-
-            /* Typography */
-            --gg-font-heading: 'Playfair Display', serif; /* Fallback for Rebel */
-            --gg-font-body: 'Poppins', sans-serif;
-            --gg-font-sub: 'Poppins', sans-serif;
-
-            /* Layout & Functional */
-            --gg-header-height: 100px;
-            --gg-container-width: 1400px;
-            --gg-transition: 0.4s cubic-bezier(0.25, 1, 0.5, 1);
-
-            /* Effects */
-            --glow-maroon: rgba(80, 17, 34, 0.4);
-            --glow-teal: rgba(14, 124, 113, 0.3);
-        }
-
-        /* ==========================================================================
-           2. GENERIC – Reset & Normalize
-           ========================================================================== */
-        *, *::before, *::after {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
-        html {
-            scroll-behavior: smooth;
-            scroll-padding-top: var(--gg-header-height);
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-        }
-
-        /* Scrollbar */
-        ::-webkit-scrollbar { width: 7px; }
-        ::-webkit-scrollbar-track { background: #000; }
-        ::-webkit-scrollbar-thumb { background: var(--gg-accent); border-radius: 4px; }
-
-        body {
-            background-color: var(--gg-black);
-            font-family: var(--gg-font-body);
-            color: var(--gg-white);
-            line-height: 1.6;
-            overflow-x: hidden;
-            min-height: 100vh;
-            position: relative;
-        }
-
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            /* background: 
-                radial-gradient(ellipse at 20% 20%, var(--gg-primary-dark) 0%, transparent 50%),
-                radial-gradient(ellipse at 80% 80%, var(--gg-eco-dark) 0%, transparent 50%); */
-            pointer-events: none;
-            z-index: 0;
-            opacity: 0.4;
-        }
-
-        main { position: relative; z-index: 1; }
-
-        h1, h2, h3, h4 { font-family: var(--gg-font-heading); color: var(--gg-eco-light); line-height: 1.2; }
-        p { font-size: 1rem; line-height: 1.7; color: rgba(255,255,255,0.85); }
-        a { text-decoration: none; color: inherit; transition: color var(--gg-transition); }
-        ul { list-style: none; }
-        img { max-width: 100%; display: block; }
-        button { font-family: var(--gg-font-body); cursor: pointer; border: none; outline: none; }
-
-        /* ==========================================================================
-           3. UTILITIES
-           ========================================================================== */
-        .gg-container { max-width: var(--gg-container-width); margin: 0 auto; padding: 0 5%; }
-        .gg-section-padding { padding: 6rem 0; }
-        .gg-text-center { text-align: center; }
-
-        /* Section Header */
-        .gg-section-label {
-            display: inline-block;
-            font-size: 0.75rem;
-            letter-spacing: 4px;
-            text-transform: uppercase;
-            color: var(--gg-accent);
-            margin-bottom: 1rem;
-            font-weight: 600;
-        }
-        .gg-section-divider {
-            width: 60px; height: 1px;
-            background: linear-gradient(90deg, transparent, var(--gg-primary), transparent);
-            margin: 1rem auto 2rem;
-        }
-
-        /* Reveal Animation Classes */
-        .gg-reveal {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: opacity 0.8s cubic-bezier(0.25,1,0.5,1), transform 0.8s cubic-bezier(0.25,1,0.5,1);
-        }
-        .gg-reveal.active { opacity: 1; transform: translateY(0); }
-
-        .gg-reveal-stagger > * {
-            opacity: 0; transform: translateY(20px);
-            transition: opacity 0.6s ease, transform 0.6s ease;
-        }
-        .gg-reveal-stagger.active > *:nth-child(1) { opacity:1; transform:translateY(0); transition-delay: 0.1s; }
-        .gg-reveal-stagger.active > *:nth-child(2) { opacity:1; transform:translateY(0); transition-delay: 0.2s; }
-        .gg-reveal-stagger.active > *:nth-child(3) { opacity:1; transform:translateY(0); transition-delay: 0.3s; }
-        .gg-reveal-stagger.active > *:nth-child(4) { opacity:1; transform:translateY(0); transition-delay: 0.4s; }
-
-        /* ===============================
-   Glamour Gatherings Button
-================================ */
-
-.gg-btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.8rem;
-    padding: 1rem 2.5rem;
-
-    background: linear-gradient(135deg, var(--primary-dark), var(--primary));
-    color: var(--ivory);
-
-    font-weight: 600;
-    letter-spacing: 1.2px;
-    text-transform: uppercase;
-
-    border: 1px solid rgba(255,255,255,0.15);
-    cursor: pointer;
-    position: relative;
-    overflow: hidden;
-    z-index: 1;
-
-    font-size: 0.85rem;
-    transition: all 0.4s ease;
-
-    border-radius: 8px;
-
-    /* Premium depth */
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
-}
-
-/* Teal overlay animation */
-.gg-btn::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(135deg, var(--accent-dark), var(--accent));
-    opacity: 0;
-    z-index: -1;
-    transition: opacity 0.4s ease;
-}
-
-/* Hover Effects */
-.gg-btn:hover {
-    transform: translateY(-4px);
-    border-color: var(--accent);
-    box-shadow: 0 15px 35px rgba(0, 74, 65, 0.35);
-}
-
-.gg-btn:hover::before {
-    opacity: 1;
-}
-
-/* Active Click Effect */
-.gg-btn:active {
-    transform: translateY(-1px);
-}
-
-        .gg-btn-outline {
-            display: inline-flex; align-items: center; justify-content: center;
-            gap: 0.8rem;
-            padding: 0.9rem 2.2rem;
-            background: transparent;
-            border: 1px solid rgba(191,165,168,0.4);
-            color: var(--gg-accent);
-            font-size: 0.85rem; letter-spacing: 1.5px; text-transform: uppercase;
-            cursor: pointer; transition: var(--gg-transition); border-radius: 2px;
-        }
-        .gg-btn-outline:hover { background: var(--gg-accent); color: var(--gg-black); border-color: var(--gg-accent); }
-
-        /* ==========================================================================
-           4. PRELOADER
-           ========================================================================== */
-        #gg-preloader {
-            position: fixed; inset: 0;
-            background: var(--gg-black);
-            z-index: 9999;
-            display: flex; flex-direction: column;
-            justify-content: center; align-items: center;
-            transition: opacity 0.8s ease;
-        }
-        #gg-preloader.hidden { opacity: 0; pointer-events: none; }
-
-        .gg-loader-logo {
-            font-family: var(--gg-font-heading);
-            font-size: clamp(2rem, 5vw, 3.5rem);
-            color: var(--gg-primary);
-            letter-spacing: 5px; margin-bottom: 0.5rem;
-            animation: pulse 2s infinite;
-        }
-        .gg-loader-sub {
-            font-size: 0.7rem; letter-spacing: 5px; color: var(--gg-accent);
-            text-transform: uppercase; margin-bottom: 1.5rem; opacity: 0.7;
-        }
-        .gg-loader-bar {
-            width: 200px; height: 2px; background: rgba(255,255,255,0.1);
-            position: relative; overflow: hidden; border-radius: 2px;
-        }
-        .gg-loader-bar::after {
-            content: ''; position: absolute; top: 0; left: 0;
-            height: 100%; width: 0;
-            background: linear-gradient(90deg, var(--gg-primary), var(--gg-accent));
-            animation: loadProgress 2.5s ease-in-out forwards;
-        }
-        @keyframes pulse { 0%,100% { opacity:0.6; } 50% { opacity:1; } }
-        @keyframes loadProgress { from { width: 0; } to { width: 100%; } }
-
-        /* ==========================================================================
-           5. NAVIGATION
-           ========================================================================== */
-        .gg-nav {
-            position: fixed; top: 0; left: 0; width: 100%;
-            height: var(--gg-header-height);
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 0 5%; z-index: 1000;
-            background: rgba(8, 8, 8, 0.15);
-            backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-            transition: var(--gg-transition);
-        }
-        .gg-nav.scrolled { height: 90px; background: rgba(0,0,0,0.65); box-shadow: 0 4px 30px rgba(0,0,0,0.5); }
-
-        .gg-logo {
-            font-family: var(--gg-font-heading);
-            font-size: 1.6rem; color: var(--gg-white); font-weight: 700;
-            letter-spacing: 1px; text-transform: uppercase;
-        }
-        .gg-logo span { color: var(--gg-eco-light); }
-
-        .brand-mark-logo { display: flex; align-items: center; }
-        .brand-mark-logo img { width: 200px; height: auto; opacity: 0.9; }
-
-        .gg-nav-menu { display: flex; gap: 2.5rem; align-items: center; }
-        .gg-nav-link {
-            font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1.5px;
-            color: rgba(255,255,255,0.7); position: relative; padding-bottom: 4px;
-        }
-        .gg-nav-link::after {
-            content: ''; position: absolute; bottom: 0; left: 0;
-            width: 0; height: 1px; background: var(--gg-accent); transition: width 0.3s ease;
-        }
-        .gg-nav-link:hover { color: var(--gg-eco-light); }
-        .gg-nav-link:hover::after { width: 100%; }
-
-        .gg-nav-cta { padding: 0.6rem 1.5rem; font-size: 0.75rem; letter-spacing: 1px; }
-
-        .gg-mobile-toggle {
-            display: none; font-size: 1.5rem; cursor: pointer; color: var(--gg-white); background: none;
-        }
-
-        /* ==========================================================================
-           6. HERO SLIDER
-           ========================================================================== */
-        .gg-hero-slider {
-            position: relative; height: 100vh; width: 100%; overflow: hidden; background: #000;
-        }
-        .gg-slide {
-            position: absolute; inset: 0; opacity: 0; transition: opacity 1.2s ease;
-            display: flex; flex-direction: column; justify-content: center; align-items: center;
-            background-size: cover; background-position: center;
-        }
-        .gg-slide.active { opacity: 1; z-index: 1; }
-        .gg-slide-overlay {
-            position: absolute; inset: 0;
-            background: linear-gradient(160deg, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.8) 100%);
-            z-index: 1;
-        }
-
-        .gg-slide-content {
-            position: relative; z-index: 2; text-align: center;
-            padding: calc(var(--gg-header-height) + 2rem) 5% 4rem; 
-            /* max-width: 900px; */
-        }
-
-        .gg-hero-eyebrow {
-            background: linear-gradient(160deg, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.8) 100%);
-            display: inline-block; font-size: 0.75rem; letter-spacing: 4px;
-            text-transform: uppercase; color: var(--gg-accent);
-            border: 1px solid rgba(191,165,168,0.3); padding: 0.4rem 1.5rem;
-            border-radius: 50px; margin-bottom: 1.5rem; animation: ggFadeUp 0.8s ease both;
-        }
-        .gg-hero-eyebrow p{
-            font-weight: 600;
-        }
-        .gg-hero-title {
-            font-size: clamp(2.5rem, 6vw, 5rem); margin-bottom: 1.2rem;
-            color: var(--gg-white); text-shadow: 0 4px 30px rgba(0,0,0,0.8);
-            animation: ggFadeUp 0.9s 0.1s ease both;
-        }
-        .gg-hero-tagline {
-            font-size: clamp(1rem, 2vw, 1.3rem); color: var(--gg-eco-light);
-            margin-bottom: 2.5rem; font-weight: 300; line-height: 1.8;
-            animation: ggFadeUp 1s 0.2s ease both;
-        }
-
-        @keyframes ggFadeUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
-
-        /* Meta Box */
-        .gg-event-meta-box {
-            display: flex; justify-content: center; gap: 2rem; margin-bottom: 2.5rem; flex-wrap: wrap;
-            animation: ggFadeUp 1s 0.3s ease both;
-        }
-        .gg-meta-item {
-            background: rgba(255,255,255,0.05); backdrop-filter: blur(10px);
-            border: 1px solid rgba(255,255,255,0.1); border-radius: 4px;
-            padding: 1rem 1.5rem; min-width: 120px; text-align: center;
-        }
-        .gg-meta-item h3 { font-size: 1.5rem; color: var(--gg-eco-light); margin-bottom: 0.2rem; font-family: var(--gg-font-heading); }
-        .gg-meta-item p { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 2px; color: var(--gg-white); margin:0; }
-
-        /* Countdown */
-        .gg-countdown { display: flex; gap: 1rem; justify-content: center; margin-bottom: 2.5rem; }
-        .gg-time-box {
-            background: rgba(0,0,0,0.4); border: 1px solid rgba(14,124,113,0.3);
-            border-radius: 4px; padding: 0.8rem 1.1rem; min-width: 75px; text-align: center;
-        }
-        .gg-time-val {
-            display: block; font-family: var(--gg-font-heading);
-            font-size: clamp(1.4rem, 2.5vw, 1.8rem); font-weight: 700;
-            color: var(--gg-white); line-height: 1;
-        }
-        .gg-time-label {
-            font-size: 0.65rem; text-transform: uppercase; letter-spacing: 1.5px;
-            color: var(--gg-accent); margin-top: 0.4rem; display: block;
-        }
-
-        /* Slider Controls */
-        .gg-slider-controls {
-            position: absolute; bottom: 3rem; right: 3rem; z-index: 10; display: flex; gap: 1rem;
-        }
-        .gg-slider-btn {
-            background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);
-            color: var(--gg-white); width: 50px; height: 50px; border-radius: 50%;
-            cursor: pointer; display: flex; align-items: center; justify-content: center;
-            transition: var(--gg-transition);
-        }
-        .gg-slider-btn:hover { background: var(--gg-accent); border-color: var(--gg-accent); color: #000; }
-
-        /* Dots */
-        .gg-slider-dots {
-            position: absolute; bottom: 3rem; left: 50%; transform: translateX(-50%);
-            display: flex; gap: 0.8rem; z-index: 10;
-        }
-        .gg-dot {
-            width: 10px; height: 10px; border-radius: 50%; background: rgba(255,255,255,0.2);
-            cursor: pointer; transition: all 0.3s; border: none;
-        }
-        .gg-dot.active { background: var(--gg-accent); transform: scale(1.3); }
-
-        /* ==========================================================================
-           7. ABOUT SECTION
-           ========================================================================== */
-        .gg_about_section {
-            position: relative;
-            /* High quality fashion background */
-            background-image: url('./assets/images/img/bg/model.png');
-            background-size: cover; background-position: center; background-attachment: fixed;
-            padding: 6rem 5%; display: flex; justify-content: center; align-items: center; overflow: hidden;
-        }
-        .gg_about_section::before {
-            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(135deg, rgba(26, 26, 26, 0.9), rgba(26, 26, 26, 0.85)); z-index: 1;
-        }
-        .gg_about_container {
-            position: relative; z-index: 2; display: grid; grid-template-columns: 1fr 1fr; gap: 4rem;
-            max-width: var(--gg-container-width); width: 100%; align-items: center;
-        }
-        .about-content { color: var(--gg-white); }
-        .section-title { font-size: 2.5rem; margin-bottom: 1.5rem; }
-        
-        .feature-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; margin-top: 2rem; }
-        .feature-item {
-            display: flex; align-items: center; gap: 1rem;
-            background: rgba(255,255,255,0.03); padding: 1rem;
-            border-radius: 4px; border: 1px solid rgba(255,255,255,0.1);
-            transition: var(--gg-transition);
-        }
-        .feature-item:hover { transform: translateY(-3px); background: rgba(255,255,255,0.06); border-color: var(--gg-primary); }
-        .feature-icon { font-size: 1.5rem; color: var(--gg-accent); }
-
-        /* Simple Unicode Icons */
-        .icon-leaf::before { content: '🌿'; }
-        .icon-heart::before { content: '❤'; }
-        .icon-earth::before { content: '🌍'; }
-        .icon-star::before { content: '★'; }
-        
-        .feature-text h3 { font-size: 1rem; margin: 0; font-family: var(--gg-font-body); font-weight: 500; }
-
-        .about-image-wrapper { position: relative; display: flex; justify-content: center; }
-        .image-frame {
-            position: relative; padding: 10px; background: rgba(255,255,255,0.05);
-            border: 1px solid rgba(255,255,255,0.8); border-radius: 8px;
-            backdrop-filter: blur(5px); transform: rotate(-2deg); transition: var(--gg-transition);
-        }
-        .image-frame:hover { transform: rotate(0deg); }
-        .bg-hero-image {
-            width: 100%; max-width: 500px; height: 600px; object-fit: cover;
-            border-radius: 4px; filter: grayscale(20%); transition: filter 0.5s;
-        }
-        .image-frame:hover .bg-hero-image { filter: grayscale(0%); }
-        .frame-accent {
-            position: absolute; top: -10px; right: -10px; width: 100%; height: 100%;
-            border: 1px solid var(--gg-accent); border-radius: 8px; z-index: -1; opacity: 0.6;
-        }
-
-        /* ==========================================================================
-           8. SCHEDULE SECTION
-           ========================================================================== */
-        .gg-schedule { background-color: #0f0f0f; position: relative; }
-        .gg-schedule::before {
-            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            /* background: radial-gradient(circle at top right, rgba(80, 17, 34, 0.15), transparent 40%); */
-            pointer-events: none;
-        }
-
-        .gg-timeline { position: relative; max-width: 800px; margin: 4rem auto 0; }
-        .gg-timeline::before {
-            content: ''; position: absolute; left: 50%; transform: translateX(-50%);
-            width: 1px; height: 100%;
-            background: linear-gradient(to bottom, var(--gg-primary), var(--gg-eco-dark));
-        }
-        .gg-timeline-item {
-            display: flex; justify-content: flex-end; padding-right: 3rem;
-            position: relative; margin-bottom: 3rem; width: 50%;
-        }
-        .gg-timeline-item:nth-child(even) { justify-content: flex-start; padding-right: 0; padding-left: 3rem; margin-left: 50%; }
-        .gg-timeline-dot {
-            position: absolute; right: -6px; top: 1.2rem; width: 12px; height: 12px;
-            background: var(--gg-eco-light); border-radius: 50%; z-index: 2;
-            box-shadow: 0 0 0 4px rgba(14,124,113,0.15);
-        }
-        .gg-timeline-item:nth-child(even) .gg-timeline-dot { right: auto; left: -6px; }
-
-        .gg-time-card {
-            background: #bfa5a8;opacity: 0.64; border: 1px solid rgba(191,165,168,0.1);
-            padding: 2rem; border-radius: 4px; width: 100%; transition: var(--gg-transition);
-        }
-        .gg-time-card:hover {
-            border-color: var(--gg-primary); transform: translateY(-5px);
-            background: var(--accent);
-        }
-        .gg-time {
-            font-family: var(--gg-font-heading); 
-            color: var(--accent-dark);
-            font-size: 1.1rem; margin-bottom: 0.5rem; display: block; letter-spacing: 1px;
-        }
-        .gg-time time:hover{
-            color:#000;
-        }
-        .gg-session-title { font-size: 1.4rem; color: var(--gg-white); margin-bottom: 0.5rem; }
-        .gg-session-desc { font-size: 0.9rem; color: #bbb; line-height: 1.6; }
-
-        /* ==========================================================================
-           9. PARTICIPATION (CARDS)
-           ========================================================================== */
-        .gg-participation { background: #050505; }
-        .gg-cards-grid {
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 2rem; margin-top: 3rem;
-        }
-        .gg-role-card {
-            background: linear-gradient(145deg, #121212, #0a0a0a); padding: 3rem 2rem;
-            text-align: center; border: 1px solid rgba(255,255,255,0.05);
-            border-radius: 4px; transition: var(--gg-transition); position: relative;
-            display: flex; flex-direction: column; align-items: center; gap: 1.5rem;
-        }
-        .gg-role-card::before {
-            content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
-            background: linear-gradient(90deg, transparent, var(--gg-accent), transparent); opacity: 0;
-            transition: opacity var(--gg-transition);
-        }
-        .gg-role-card:hover { border-color: var(--gg-primary); box-shadow: 0 10px 40px rgba(80,17,34,0.1); }
-        .gg-role-card:hover::before { opacity: 1; }
-
-        .gg-role-icon { font-size: 2.5rem; color: var(--gg-accent); }
-        .gg-role-card h3 { font-size: 1.5rem; color: var(--gg-white); margin: 0; }
-        .gg-role-card p { font-size: 0.9rem; color: #888; margin-bottom: 1rem; }
-        .gg-tickets-badge {
-            font-size: 0.7rem; letter-spacing: 2px; text-transform: uppercase;
-            color: var(--gg-eco-light); border: 1px solid rgba(14,124,113,0.3);
-            border-radius: 50px; padding: 0.4rem 1rem;
-        }
-
-        /* ==========================================================================
-           10. SPONSORS MARQUEE
-           ========================================================================== */
-        .gg-marquee-section {
-            padding: 3rem 0; background: rgba(255,255,255,0.02);
-            border-top: 1px solid var(--gg-glass-border); border-bottom: 1px solid var(--gg-glass-border);
-            overflow: hidden;
-        }
-        .gg-marquee-wrap {
-            display: flex; gap: 4rem; animation: marqueeLeft 40s linear infinite; width: max-content;
-        }
-        .gg-marquee-wrap:hover { animation-play-state: paused; }
-
-        .gg-sponsor-logo {
-            width: 180px; height: 80px; background: rgba(255,255,255,0.03);
-            border: 1px solid rgba(255,255,255,0.05); display: flex; align-items: center; justify-content: center;
-            border-radius: 4px; color: rgba(255,255,255,0.3); font-size: 0.9rem; letter-spacing: 2px;
-            text-transform: uppercase; flex-shrink: 0; font-weight: 600; transition: var(--gg-transition);
-        }
-        .gg-sponsor-logo:hover { color: var(--gg-white); border-color: var(--gg-accent); background: rgba(14,124,113,0.05); }
-        
-        @keyframes marqueeLeft { from { transform: translateX(0); } to { transform: translateX(-50%); } }
-
-        /* ==========================================================================
-           11. GLAMOROUS SCROLL GALLERIES
-           ========================================================================== */
-        .gg-gallery-section { padding: 6rem 0; position: relative; overflow: hidden; }
-        .gg-gallery-section.dark { background: #080808; }
-        .gg-gallery-section.mid { background: #0c0c0c; }
-
-        /* Ambient Glow */
-        .gg-gallery-section::before {
-            content: ''; position: absolute; inset: 0; pointer-events: none; z-index: 0;
-        }
-        .gg-gallery-section.dark::before {
-            /* background: radial-gradient(ellipse at 15% 50%, var(--glow-maroon) 0%, transparent 50%),
-                        radial-gradient(ellipse at 85% 50%, var(--glow-teal) 0%, transparent 50%); */
-        }
-        .gg-gallery-section.mid::before {
-            /* background: radial-gradient(ellipse at 85% 50%, var(--glow-maroon) 0%, transparent 50%),
-                        radial-gradient(ellipse at 15% 50%, var(--glow-teal) 0%, transparent 50%); */
-        }
-
-        .gg-gallery-header { text-align: center; margin-bottom: 3rem; position: relative; z-index: 2; }
-        
-        .gg-gallery-track-outer { position: relative; overflow: hidden; z-index: 2; }
-        /* Fade Edges */
-        .gg-gallery-track-outer::before, .gg-gallery-track-outer::after {
-            content: ''; position: absolute; top: 0; bottom: 0; width: 100px; z-index: 3; pointer-events: none;
-        }
-        .gg-gallery-track-outer::before { left: 0; background: linear-gradient(to right, #080808, transparent); }
-        .gg-gallery-track-outer.mid::before { background: linear-gradient(to right, #0c0c0c, transparent); }
-        .gg-gallery-track-outer.mid::after { right: 0; background: linear-gradient(to left, #0c0c0c, transparent); }
-        .gg-gallery-track-outer::after { right: 0; background: linear-gradient(to left, #080808, transparent); }
-
-        .gg-gallery-track { display: flex; gap: 1.5rem; padding: 1.5rem 2rem; width: max-content; }
-        .gg-gallery-track.ltr { animation: galleryLTR 60s linear infinite; }
-        .gg-gallery-track.rtl { animation: galleryRTL 60s linear infinite; }
-        .gg-gallery-track:hover { animation-play-state: paused; }
-
-        @keyframes galleryLTR { from { transform: translateX(0); } to { transform: translateX(-50%); } }
-        @keyframes galleryRTL { from { transform: translateX(-50%); } to { transform: translateX(0); } }
-
-        /* Person Card */
-        .gg-person-card {
-            position: relative; width: 240px; height: 340px; flex-shrink: 0;
-            border-radius: 4px; overflow: hidden; cursor: pointer;
-            border: 1px solid rgba(255,255,255,0.05); transition: transform 0.5s ease, box-shadow 0.5s ease;
-        }
-        .gg-person-card::after {
-            content: ''; position: absolute; inset: 0;
-            background: linear-gradient(to top, rgba(80,17,34,0.9) 0%, rgba(14,124,113,0.1) 40%, transparent 70%);
-            opacity: 0; transition: opacity 0.4s ease; z-index: 1;
-        }
-        .gg-person-card:hover { transform: translateY(-10px) scale(1.02); border-color: rgba(191,165,168,0.3); box-shadow: 0 15px 40px rgba(0,0,0,0.5); }
-        .gg-person-card:hover::after { opacity: 1; }
-
-        .gg-person-card img {
-            width: 100%; height: 100%; object-fit: cover; object-position: top center;
-            filter: grayscale(100%) contrast(1.1); transition: filter 0.5s ease, transform 0.6s ease;
-        }
-        .gg-person-card:hover img { filter: grayscale(0%) contrast(1); transform: scale(1.1); }
-
-        .gg-person-overlay {
-            position: absolute; bottom: 0; left: 0; right: 0; padding: 2rem 1.5rem 1.5rem;
-            z-index: 2; transform: translateY(60%); transition: transform 0.4s cubic-bezier(0.25,1,0.5,1);
-        }
-        .gg-person-card:hover .gg-person-overlay { transform: translateY(0); }
-
-        .gg-person-name {
-            display: block; font-family: var(--gg-font-heading); font-size: 1.25rem;
-            color: var(--gg-white); letter-spacing: 0.5px; margin-bottom: 0.3rem;
-        }
-        .gg-person-role {
-            font-size: 0.7rem; letter-spacing: 2.5px; text-transform: uppercase;
-            color: var(--gg-accent); font-weight: 600;
-        }
-
-        /* Shimmer */
-        .gg-card-shimmer {
-            position: absolute; top: 0; left: 0; right: 0; height: 1px;
-            background: linear-gradient(90deg, transparent, var(--gg-accent), transparent);
-            transform: scaleX(0); transition: transform 0.6s ease; z-index: 4;
-        }
-        .gg-person-card:hover .gg-card-shimmer { transform: scaleX(1); }
-
-        /* ==========================================================================
-           12. VENUE & CTA & FOOTER
-           ========================================================================== */
-        .gg-venue { background: #040404; }
-        .gg-map-wrapper {
-            margin-top: 3rem; border: 1px solid var(--gg-glass-border); border-radius: 4px;
-            overflow: hidden; max-width: 1200px; margin-left: auto; margin-right: auto;
-        }
-        .gg-map-wrapper iframe { width: 100%; height: 400px; border: none; display: block; filter: invert(90%) hue-rotate(180deg); }
-
-        .gg-cta-section {
-            position: relative; padding: 8rem 0; text-align: center;
-            background: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.8)),
-                        url('https://images.unsplash.com/photo-1492684223066-81342ee5ff30?q=80&w=2070&auto=format&fit=crop') center/cover no-repeat fixed;
-        }
-        .gg-cta-section::before {
-            content: ''; position: absolute; inset: 0;
-            /* background: radial-gradient(ellipse at center, var(--glow-teal) 0%, transparent 60%); pointer-events: none; */
-        }
-        .gg-cta-content { position: relative; z-index: 2; }
-
-        .gg-footer { background: #000; padding: 5rem 0 2rem; border-top: 1px solid #1a1a1a; }
-        .gg-footer-grid {
-            display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 3rem; margin-bottom: 3rem;
-        }
-        .gg-footer-brand h4 { font-size: 1.5rem; color: var(--gg-white); margin-bottom: 1rem; }
-        .gg-footer-brand p { color: #666; font-size: 0.9rem; }
-        .gg-footer-links h5 { margin-bottom: 1.5rem; font-size: 0.8rem; letter-spacing: 2px; text-transform: uppercase; color: var(--gg-accent); }
-        .gg-footer-links li { margin-bottom: 0.8rem; }
-        .gg-footer-links a { color: #888; font-size: 0.9rem; transition: 0.3s; }
-        .gg-footer-links a:hover { color: var(--gg-white); padding-left: 5px; }
-        
-        .gg-footer-socials { display: flex; gap: 1rem; margin-top: 1.5rem; }
-        .gg-social-icon {
-            width: 40px; height: 40px; border: 1px solid #333; border-radius: 50%;
-            display: flex; align-items: center; justify-content: center; color: #888;
-            transition: var(--gg-transition);
-        }
-        .gg-social-icon:hover { background: var(--gg-primary); border-color: var(--gg-primary); color: var(--gg-white); }
-
-        .gg-copyright {
-            text-align: center; padding-top: 2rem; border-top: 1px solid #111;
-            color: #444; font-size: 0.8rem;
-        }
-
-        /* ==========================================================================
-           13. MODALS & UTILS
-           ========================================================================== */
-        dialog {
-            margin: auto; background: #121212; color: var(--gg-white);
-            border: 1px solid var(--gg-primary); padding: 2.5rem; max-width: 500px; width: 90%;
-            border-radius: 8px; box-shadow: 0 0 50px rgba(0,0,0,0.8);
-            animation: modalIn 0.3s ease;
-        }
-        dialog::backdrop { background: rgba(0,0,0,0.8); backdrop-filter: blur(5px); }
-        @keyframes modalIn { from { opacity:0; transform: scale(0.95); } to { opacity:1; transform: scale(1); } }
-
-        .gg-modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; border-bottom: 1px solid #222; padding-bottom: 1rem; }
-        .gg-modal-header h3 { font-size: 1.5rem; margin: 0; }
-        .gg-close-modal { background: none; border: none; color: #888; font-size: 1.5rem; cursor: pointer; }
-        .gg-close-modal:hover { color: var(--gg-white); }
-
-        .gg-form-group { margin-bottom: 1.5rem; }
-        .gg-form-group label { display: block; margin-bottom: 0.5rem; font-size: 0.8rem; letter-spacing: 1px; text-transform: uppercase; color: #aaa; }
-        .gg-form-control {
-            width: 100%; padding: 0.8rem 1rem; background: #0a0a0a; border: 1px solid #333;
-            color: var(--gg-white); font-family: var(--gg-font-body); border-radius: 2px;
-        }
-        .gg-form-control:focus { outline: none; border-color: var(--gg-accent); }
-
-        .gg-scroll-top {
-            position: fixed; bottom: 2rem; right: 2rem; width: 45px; height: 45px;
-            background: var(--gg-primary); color: var(--gg-white); border: none; border-radius: 50%;
-            display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 900;
-            opacity: 0; visibility: hidden; transition: var(--gg-transition); box-shadow: 0 5px 20px rgba(0,0,0,0.3);
-        }
-        .gg-scroll-top.visible { opacity: 1; visibility: visible; }
-        .gg-scroll-top:hover { background: var(--gg-accent); transform: translateY(-3px); }
-
-        /* Toast Notification */
-        .gg-toast {
-            position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%) translateY(100px);
-            background: var(--gg-accent); color: #000; padding: 1rem 2rem; border-radius: 4px;
-            font-weight: 600; z-index: 10000; transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5); display: flex; align-items: center; gap: 0.5rem;
-        }
-        .gg-toast.show { transform: translateX(-50%) translateY(0); }
-
-        /* ==========================================================================
-           14. RESPONSIVE MEDIA QUERIES
-           ========================================================================== */
-        @media (max-width: 1024px) {
-            .gg-footer-grid { grid-template-columns: 1fr 1fr; }
-        }
-        @media (max-width: 768px) {
-            .gg-nav-menu {
-                position: fixed; top: var(--gg-header-height); left: 0; right: 0;
-                background: rgba(0,0,0,0.98); flex-direction: column; padding: 3rem 5%;
-                transform: translateY(-150%); transition: transform 0.4s ease; border-bottom: 1px solid #222;
-            }
-            .gg-nav-menu.active { transform: translateY(0); }
-            .gg-mobile-toggle { display: flex; align-items: center; justify-content: center; }
-            .gg-nav-cta { display: none; }
-
-            .gg_about_container { grid-template-columns: 1fr; gap: 3rem; }
-            .about-image-wrapper { order: -1; }
-            
-            .gg-timeline::before { left: 20px; }
-            .gg-timeline-item, .gg-timeline-item:nth-child(even) {
-                width: 100%; padding-left: 50px; padding-right: 0; margin-left: 0; justify-content: flex-start;
-            }
-            .gg-timeline-dot, .gg-timeline-item:nth-child(even) .gg-timeline-dot { left: 14px; right: auto; }
-            
-            .gg-footer-grid { grid-template-columns: 1fr; }
-            .gg-gallery-track-outer::before, .gg-gallery-track-outer::after { width: 40px; }
-        }
-        @media (max-width: 480px) {
-            .gg-countdown { gap: 0.5rem; }
-            .gg-event-meta-box { gap: 1rem; }
-            .gg-person-card { width: 200px; height: 300px; }
-            .gg-slider-controls { display: none; } /* Hide arrows on small screens, use swipe/dots */
-        }
-    </style>
+    <link rel="stylesheet" href="./assets/css/style.css">
 </head>
 <body>
-
     <!-- ══════════════════════════════
          PRELOADER
     ══════════════════════════════ -->
@@ -876,18 +118,16 @@
         </div>
 
         <!-- Controls -->
-        <div class="gg-slider-controls">
+        <!-- <div class="gg-slider-controls">
             <button class="gg-slider-btn" id="prev-slide" aria-label="Previous slide">
                 <i class="fas fa-chevron-left" aria-hidden="true"></i>
             </button>
             <button class="gg-slider-btn" id="next-slide" aria-label="Next slide">
                 <i class="fas fa-chevron-right" aria-hidden="true"></i>
             </button>
-        </div>
-        <div class="gg-slider-dots" role="tablist">
-            <button class="gg-dot active" data-index="0" role="tab" aria-selected="true"  aria-label="Slide 1"></button>
-            <button class="gg-dot"        data-index="1" role="tab" aria-selected="false" aria-label="Slide 2"></button>
-        </div>
+        </div> -->
+        
+        <div class="gg-slider-dots" role="tablist" aria-label="Hero slider dots"></div>
     </header>
 
     <main id="main-content">
@@ -997,6 +237,327 @@
                 </div>
             </div>
         </section>
+        
+
+        
+        <!-- ══════════════════════════════
+            SPONSORS MARQUEE
+        ══════════════════════════════ -->
+        <section class="gg-marquee-section" aria-label="Our sponsors">
+            <div class="gg-marquee-wrap" aria-hidden="true">
+                <!-- Logo 1 -->
+                <div class="gg-sponsor-logo">
+                    <img src="./assets/images/logo/ethiroli_logo.png" alt="Ethiroli logo" loading="lazy">
+                </div>
+                <!-- Logo 2 -->
+                <div class="gg-sponsor-logo">
+                    <img src="./assets/images/logo/bumble_bee.png" alt="Bumble Bee logo" loading="lazy">
+                </div>
+                <!-- Logo 3 -->
+                <div class="gg-sponsor-logo">
+                    <img src="./assets/images/logo/jci.png" alt="JCI logo" loading="lazy">
+                </div>
+                <!-- Repeat pattern to reach 10 items -->
+                <div class="gg-sponsor-logo">
+                    <img src="./assets/images/logo/ethiroli_logo.png" alt="Ethiroli logo" loading="lazy">
+                </div>
+                <div class="gg-sponsor-logo">
+                    <img src="./assets/images/logo/bumble_bee.png" alt="Bumble Bee logo" loading="lazy">
+                </div>
+                <div class="gg-sponsor-logo">
+                    <img src="./assets/images/logo/jci.png" alt="JCI logo" loading="lazy">
+                </div>
+                <div class="gg-sponsor-logo">
+                    <img src="./assets/images/logo/ethiroli_logo.png" alt="Ethiroli logo" loading="lazy">
+                </div>
+                <div class="gg-sponsor-logo">
+                    <img src="./assets/images/logo/bumble_bee.png" alt="Bumble Bee logo" loading="lazy">
+                </div>
+                <div class="gg-sponsor-logo">
+                    <img src="./assets/images/logo/jci.png" alt="JCI logo" loading="lazy">
+                </div>
+                <div class="gg-sponsor-logo">
+                    <img src="./assets/images/logo/ethiroli_logo.png" alt="Ethiroli logo" loading="lazy">
+                </div>
+                <!-- Logo 1 -->
+                <div class="gg-sponsor-logo">
+                    <img src="./assets/images/logo/ethiroli_logo.png" alt="Ethiroli logo" loading="lazy">
+                </div>
+                <!-- Logo 2 -->
+                <div class="gg-sponsor-logo">
+                    <img src="./assets/images/logo/bumble_bee.png" alt="Bumble Bee logo" loading="lazy">
+                </div>
+                <!-- Logo 3 -->
+                <div class="gg-sponsor-logo">
+                    <img src="./assets/images/logo/jci.png" alt="JCI logo" loading="lazy">
+                </div>
+                <!-- Repeat pattern to reach 10 items -->
+                <div class="gg-sponsor-logo">
+                    <img src="./assets/images/logo/ethiroli_logo.png" alt="Ethiroli logo" loading="lazy">
+                </div>
+                <div class="gg-sponsor-logo">
+                    <img src="./assets/images/logo/bumble_bee.png" alt="Bumble Bee logo" loading="lazy">
+                </div>
+                <div class="gg-sponsor-logo">
+                    <img src="./assets/images/logo/jci.png" alt="JCI logo" loading="lazy">
+                </div>
+                <div class="gg-sponsor-logo">
+                    <img src="./assets/images/logo/ethiroli_logo.png" alt="Ethiroli logo" loading="lazy">
+                </div>
+                <div class="gg-sponsor-logo">
+                    <img src="./assets/images/logo/bumble_bee.png" alt="Bumble Bee logo" loading="lazy">
+                </div>
+                <div class="gg-sponsor-logo">
+                    <img src="./assets/images/logo/jci.png" alt="JCI logo" loading="lazy">
+                </div>
+                <div class="gg-sponsor-logo">
+                    <img src="./assets/images/logo/ethiroli_logo.png" alt="Ethiroli logo" loading="lazy">
+                </div>
+                
+            </div>
+        </section>
+        
+        
+        
+        <!-- ══════════════════════════════
+             MODELS SCROLL  (Left → Right)
+             Images loaded directly from local files.
+             Replace src paths with your actual image paths.
+        ══════════════════════════════ -->
+        <section id="models" class="gg-gallery-section dark" aria-labelledby="models-heading">
+            <div class="gg-gallery-header gg-reveal">
+                <span class="gg-section-label">Eco Fashion Walk</span>
+                <h2 id="models-heading">Featured Models</h2>
+                <div class="gg-section-divider" aria-hidden="true"></div>
+            </div>
+
+            <div class="gg-gallery-track-outer" aria-label="Scrolling model showcase">
+                <div class="gg-gallery-track ltr">
+                    <!-- ── 20 MODEL CARDS – replace src with your local paths ── -->
+                    <!-- e.g. src="./assets/images/model/model-01.jpg" -->
+                    <article class="gg-person-card">
+                        <div class="gg-card-shimmer" aria-hidden="true"></div>
+                        <img src="./assets/images/model/model1.png" alt="Model 1 – Glamour Gatherings Eco Fashion Walk" loading="lazy">
+                        <div class="gg-person-overlay"><span class="gg-person-name">Ananya R.</span><span class="gg-person-role">Model</span></div>
+                    </article>
+                    <article class="gg-person-card">
+                        <div class="gg-card-shimmer" aria-hidden="true"></div>
+                        <img src="./assets/images/model/model2.png" alt="Model 2 – Glamour Gatherings" loading="lazy">
+                        <div class="gg-person-overlay"><span class="gg-person-name">Divya M.</span><span class="gg-person-role">Model</span></div>
+                    </article>
+                    <article class="gg-person-card">
+                        <div class="gg-card-shimmer" aria-hidden="true"></div>
+                        <img src="./assets/images/model/model3.png" alt="Model 3 – Glamour Gatherings" loading="lazy">
+                        <div class="gg-person-overlay"><span class="gg-person-name">Priya S.</span><span class="gg-person-role">Model</span></div>
+                    </article>
+                    <article class="gg-person-card">
+                        <div class="gg-card-shimmer" aria-hidden="true"></div>
+                        <img src="./assets/images/model/model4.png" alt="Model 4 – Glamour Gatherings" loading="lazy">
+                        <div class="gg-person-overlay"><span class="gg-person-name">Kavya T.</span><span class="gg-person-role">Model</span></div>
+                    </article>
+                    <article class="gg-person-card">
+                        <div class="gg-card-shimmer" aria-hidden="true"></div>
+                        <img src="./assets/images/model/model5.png" alt="Model 5 – Glamour Gatherings" loading="lazy">
+                        <div class="gg-person-overlay"><span class="gg-person-name">Saranya K.</span><span class="gg-person-role">Model</span></div>
+                    </article>
+                    <article class="gg-person-card">
+                        <div class="gg-card-shimmer" aria-hidden="true"></div>
+                        <img src="./assets/images/model/model1.png" alt="Model 6 – Glamour Gatherings" loading="lazy">
+                        <div class="gg-person-overlay"><span class="gg-person-name">Meena L.</span><span class="gg-person-role">Model</span></div>
+                    </article>
+                    <article class="gg-person-card">
+                        <div class="gg-card-shimmer" aria-hidden="true"></div>
+                        <img src="./assets/images/model/model2.png" alt="Model 7 – Glamour Gatherings" loading="lazy">
+                        <div class="gg-person-overlay"><span class="gg-person-name">Nithya J.</span><span class="gg-person-role">Model</span></div>
+                    </article>
+                    <article class="gg-person-card">
+                        <div class="gg-card-shimmer" aria-hidden="true"></div>
+                        <img src="./assets/images/model/model3.png" alt="Model 8 – Glamour Gatherings" loading="lazy">
+                        <div class="gg-person-overlay"><span class="gg-person-name">Rani P.</span><span class="gg-person-role">Model</span></div>
+                    </article>
+                    <article class="gg-person-card">
+                        <div class="gg-card-shimmer" aria-hidden="true"></div>
+                        <img src="./assets/images/model/model4.png" alt="Model 9 – Glamour Gatherings" loading="lazy">
+                        <div class="gg-person-overlay"><span class="gg-person-name">Lavanya V.</span><span class="gg-person-role">Model</span></div>
+                    </article>
+                    <article class="gg-person-card">
+                        <div class="gg-card-shimmer" aria-hidden="true"></div>
+                        <img src="./assets/images/model/model5.png" alt="Model 10 – Glamour Gatherings" loading="lazy">
+                        <div class="gg-person-overlay"><span class="gg-person-name">Geetha B.</span><span class="gg-person-role">Model</span></div>
+                    </article>
+                    <!-- ── Duplicate set for seamless infinite loop ── -->
+                    <article class="gg-person-card">
+                        <div class="gg-card-shimmer" aria-hidden="true"></div>
+                        <img src="./assets/images/model/model1.png" alt="Model 11 – Glamour Gatherings" loading="lazy">
+                        <div class="gg-person-overlay"><span class="gg-person-name">Sindhu A.</span><span class="gg-person-role">Model</span></div>
+                    </article>
+                    <article class="gg-person-card">
+                        <div class="gg-card-shimmer" aria-hidden="true"></div>
+                        <img src="./assets/images/model/model2.png" alt="Model 12 – Glamour Gatherings" loading="lazy">
+                        <div class="gg-person-overlay"><span class="gg-person-name">Rekha C.</span><span class="gg-person-role">Model</span></div>
+                    </article>
+                    <article class="gg-person-card">
+                        <div class="gg-card-shimmer" aria-hidden="true"></div>
+                        <img src="./assets/images/model/model3.png" alt="Model 13 – Glamour Gatherings" loading="lazy">
+                        <div class="gg-person-overlay"><span class="gg-person-name">Uma D.</span><span class="gg-person-role">Model</span></div>
+                    </article>
+                    <article class="gg-person-card">
+                        <div class="gg-card-shimmer" aria-hidden="true"></div>
+                        <img src="./assets/images/model/model4.png" alt="Model 14 – Glamour Gatherings" loading="lazy">
+                        <div class="gg-person-overlay"><span class="gg-person-name">Vani E.</span><span class="gg-person-role">Model</span></div>
+                    </article>
+                    <article class="gg-person-card">
+                        <div class="gg-card-shimmer" aria-hidden="true"></div>
+                        <img src="./assets/images/model/model5.png" alt="Model 15 – Glamour Gatherings" loading="lazy">
+                        <div class="gg-person-overlay"><span class="gg-person-name">Mythili F.</span><span class="gg-person-role">Model</span></div>
+                    </article>
+                    <article class="gg-person-card">
+                        <div class="gg-card-shimmer" aria-hidden="true"></div>
+                        <img src="./assets/images/model/model1.png" alt="Model 16 – Glamour Gatherings" loading="lazy">
+                        <div class="gg-person-overlay"><span class="gg-person-name">Sudha G.</span><span class="gg-person-role">Model</span></div>
+                    </article>
+                    <article class="gg-person-card">
+                        <div class="gg-card-shimmer" aria-hidden="true"></div>
+                        <img src="./assets/images/model/model2.png" alt="Model 17 – Glamour Gatherings" loading="lazy">
+                        <div class="gg-person-overlay"><span class="gg-person-name">Janani H.</span><span class="gg-person-role">Model</span></div>
+                    </article>
+                    <article class="gg-person-card">
+                        <div class="gg-card-shimmer" aria-hidden="true"></div>
+                        <img src="./assets/images/model/model3.png" alt="Model 18 – Glamour Gatherings" loading="lazy">
+                        <div class="gg-person-overlay"><span class="gg-person-name">Kamala I.</span><span class="gg-person-role">Model</span></div>
+                    </article>
+                    <article class="gg-person-card">
+                        <div class="gg-card-shimmer" aria-hidden="true"></div>
+                        <img src="./assets/images/model/model4.png" alt="Model 19 – Glamour Gatherings" loading="lazy">
+                        <div class="gg-person-overlay"><span class="gg-person-name">Padma J.</span><span class="gg-person-role">Model</span></div>
+                    </article>
+                    <article class="gg-person-card">
+                        <div class="gg-card-shimmer" aria-hidden="true"></div>
+                        <img src="./assets/images/model/model5.png" alt="Model 20 – Glamour Gatherings" loading="lazy">
+                        <div class="gg-person-overlay"><span class="gg-person-name">Chitra K.</span><span class="gg-person-role">Model</span></div>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <!-- ══════════════════════════════
+             MAKEUP ARTISTS SCROLL  (Right → Left)
+        ══════════════════════════════ -->
+        <section class="gg-gallery-section mid" aria-labelledby="mua-heading">
+            <div class="gg-gallery-header gg-reveal">
+                <span class="gg-section-label">Styling &amp; Beauty</span>
+                <h2 id="mua-heading">Makeup Artists</h2>
+                <div class="gg-section-divider" aria-hidden="true"></div>
+            </div>
+
+            <div class="gg-gallery-track-outer mid" aria-label="Scrolling makeup artist showcase">
+                <div class="gg-gallery-track rtl">
+                    <!-- ── 20 MAKEUP ARTIST CARDS – replace src with your local paths ── -->
+                    <!-- e.g. src="./assets/images/make_up_artist/make_up (1).png1.png" -->
+                    <article class="gg-person-card">
+                        <div class="gg-card-shimmer" aria-hidden="true"></div>
+                        <img src="./assets/images/make_up_artist/make_up (1).png" alt="Makeup Artist 1 – Glamour Gatherings" loading="lazy">
+                        <div class="gg-person-overlay"><span class="gg-person-name">Sindhu A.</span><span class="gg-person-role">Makeup Artist</span></div>
+                    </article>
+                    <article class="gg-person-card">
+                        <div class="gg-card-shimmer" aria-hidden="true"></div>
+                        <img src="./assets/images/make_up_artist/make_up (2).png" alt="Makeup Artist 2 – Glamour Gatherings" loading="lazy">
+                        <div class="gg-person-overlay"><span class="gg-person-name">Rekha C.</span><span class="gg-person-role">Makeup Artist</span></div>
+                    </article>
+                    <article class="gg-person-card">
+                        <div class="gg-card-shimmer" aria-hidden="true"></div>
+                        <img src="./assets/images/make_up_artist/make_up (3).png" alt="Makeup Artist 3 – Glamour Gatherings" loading="lazy">
+                        <div class="gg-person-overlay"><span class="gg-person-name">Uma D.</span><span class="gg-person-role">Makeup Artist</span></div>
+                    </article>
+                    <article class="gg-person-card">
+                        <div class="gg-card-shimmer" aria-hidden="true"></div>
+                        <img src="./assets/images/make_up_artist/make_up (4).png" alt="Makeup Artist 4 – Glamour Gatherings" loading="lazy">
+                        <div class="gg-person-overlay"><span class="gg-person-name">Vani E.</span><span class="gg-person-role">Makeup Artist</span></div>
+                    </article>
+                    <article class="gg-person-card">
+                        <div class="gg-card-shimmer" aria-hidden="true"></div>
+                        <img src="./assets/images/make_up_artist/make_up (1).png" alt="Makeup Artist 5 – Glamour Gatherings" loading="lazy">
+                        <div class="gg-person-overlay"><span class="gg-person-name">Mythili F.</span><span class="gg-person-role">Makeup Artist</span></div>
+                    </article>
+                    <article class="gg-person-card">
+                        <div class="gg-card-shimmer" aria-hidden="true"></div>
+                        <img src="./assets/images/make_up_artist/make_up (2).png" alt="Makeup Artist 6 – Glamour Gatherings" loading="lazy">
+                        <div class="gg-person-overlay"><span class="gg-person-name">Sudha G.</span><span class="gg-person-role">Makeup Artist</span></div>
+                    </article>
+                    <article class="gg-person-card">
+                        <div class="gg-card-shimmer" aria-hidden="true"></div>
+                        <img src="./assets/images/make_up_artist/make_up (3).png" alt="Makeup Artist 7 – Glamour Gatherings" loading="lazy">
+                        <div class="gg-person-overlay"><span class="gg-person-name">Janani H.</span><span class="gg-person-role">Makeup Artist</span></div>
+                    </article>
+                    <article class="gg-person-card">
+                        <div class="gg-card-shimmer" aria-hidden="true"></div>
+                        <img src="./assets/images/make_up_artist/make_up (4).png" alt="Makeup Artist 8 – Glamour Gatherings" loading="lazy">
+                        <div class="gg-person-overlay"><span class="gg-person-name">Kamala I.</span><span class="gg-person-role">Makeup Artist</span></div>
+                    </article>
+                    <article class="gg-person-card">
+                        <div class="gg-card-shimmer" aria-hidden="true"></div>
+                        <img src="./assets/images/make_up_artist/make_up (1).png" alt="Makeup Artist 9 – Glamour Gatherings" loading="lazy">
+                        <div class="gg-person-overlay"><span class="gg-person-name">Padma J.</span><span class="gg-person-role">Makeup Artist</span></div>
+                    </article>
+                    <article class="gg-person-card">
+                        <div class="gg-card-shimmer" aria-hidden="true"></div>
+                        <img src="./assets/images/make_up_artist/make_up (2).png" alt="Makeup Artist 10 – Glamour Gatherings" loading="lazy">
+                        <div class="gg-person-overlay"><span class="gg-person-name">Chitra K.</span><span class="gg-person-role">Makeup Artist</span></div>
+                    </article>
+                    <!-- Duplicate set for seamless loop -->
+                    <article class="gg-person-card">
+                        <div class="gg-card-shimmer" aria-hidden="true"></div>
+                        <img src="./assets/images/make_up_artist/make_up (3).png" alt="Makeup Artist 11 – Glamour Gatherings" loading="lazy">
+                        <div class="gg-person-overlay"><span class="gg-person-name">Ananya R.</span><span class="gg-person-role">Makeup Artist</span></div>
+                    </article>
+                    <article class="gg-person-card">
+                        <div class="gg-card-shimmer" aria-hidden="true"></div>
+                        <img src="./assets/images/make_up_artist/make_up (4).png" alt="Makeup Artist 12 – Glamour Gatherings" loading="lazy">
+                        <div class="gg-person-overlay"><span class="gg-person-name">Divya M.</span><span class="gg-person-role">Makeup Artist</span></div>
+                    </article>
+                    <article class="gg-person-card">
+                        <div class="gg-card-shimmer" aria-hidden="true"></div>
+                        <img src="./assets/images/make_up_artist/make_up (1).png" alt="Makeup Artist 13 – Glamour Gatherings" loading="lazy">
+                        <div class="gg-person-overlay"><span class="gg-person-name">Priya S.</span><span class="gg-person-role">Makeup Artist</span></div>
+                    </article>
+                    <article class="gg-person-card">
+                        <div class="gg-card-shimmer" aria-hidden="true"></div>
+                        <img src="./assets/images/make_up_artist/make_up (2).png" alt="Makeup Artist 14 – Glamour Gatherings" loading="lazy">
+                        <div class="gg-person-overlay"><span class="gg-person-name">Kavya T.</span><span class="gg-person-role">Makeup Artist</span></div>
+                    </article>
+                    <article class="gg-person-card">
+                        <div class="gg-card-shimmer" aria-hidden="true"></div>
+                        <img src="./assets/images/make_up_artist/make_up (3).png" alt="Makeup Artist 15 – Glamour Gatherings" loading="lazy">
+                        <div class="gg-person-overlay"><span class="gg-person-name">Saranya K.</span><span class="gg-person-role">Makeup Artist</span></div>
+                    </article>
+                    <article class="gg-person-card">
+                        <div class="gg-card-shimmer" aria-hidden="true"></div>
+                        <img src="./assets/images/make_up_artist/make_up (4).png" alt="Makeup Artist 16 – Glamour Gatherings" loading="lazy">
+                        <div class="gg-person-overlay"><span class="gg-person-name">Meena L.</span><span class="gg-person-role">Makeup Artist</span></div>
+                    </article>
+                    <article class="gg-person-card">
+                        <div class="gg-card-shimmer" aria-hidden="true"></div>
+                        <img src="./assets/images/make_up_artist/make_up (1).png" alt="Makeup Artist 17 – Glamour Gatherings" loading="lazy">
+                        <div class="gg-person-overlay"><span class="gg-person-name">Nithya J.</span><span class="gg-person-role">Makeup Artist</span></div>
+                    </article>
+                    <article class="gg-person-card">
+                        <div class="gg-card-shimmer" aria-hidden="true"></div>
+                        <img src="./assets/images/make_up_artist/make_up (2).png" alt="Makeup Artist 18 – Glamour Gatherings" loading="lazy">
+                        <div class="gg-person-overlay"><span class="gg-person-name">Rani P.</span><span class="gg-person-role">Makeup Artist</span></div>
+                    </article>
+                    <article class="gg-person-card">
+                        <div class="gg-card-shimmer" aria-hidden="true"></div>
+                        <img src="./assets/images/make_up_artist/make_up (3).png" alt="Makeup Artist 19 – Glamour Gatherings" loading="lazy">
+                        <div class="gg-person-overlay"><span class="gg-person-name">Lavanya V.</span><span class="gg-person-role">Makeup Artist</span></div>
+                    </article>
+                    <article class="gg-person-card">
+                        <div class="gg-card-shimmer" aria-hidden="true"></div>
+                        <img src="./assets/images/make_up_artist/make_up (4).png" alt="Makeup Artist 20 – Glamour Gatherings" loading="lazy">
+                        <div class="gg-person-overlay"><span class="gg-person-name">Geetha B.</span><span class="gg-person-role">Makeup Artist</span></div>
+                    </article>
+                </div>
+            </div>
+        </section>
         <!-- ══════════════════════════════
              SCHEDULE
         ══════════════════════════════ -->
@@ -1100,274 +661,6 @@
                             <p class="gg-session-desc">Thank you speech, group photo, and networking session.</p>
                         </div>
                     </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- ══════════════════════════════
-             SPONSORS MARQUEE
-        ══════════════════════════════ -->
-        <section class="gg-marquee-section" aria-label="Our sponsors">
-            <div class="gg-marquee-wrap" aria-hidden="true">
-                <!-- Replace inner text with <img> tags once you have real sponsor logos -->
-                <div class="gg-sponsor-logo">Sponsor 01</div>
-                <div class="gg-sponsor-logo">Sponsor 02</div>
-                <div class="gg-sponsor-logo">Sponsor 03</div>
-                <div class="gg-sponsor-logo">Sponsor 04</div>
-                <div class="gg-sponsor-logo">Sponsor 05</div>
-                <div class="gg-sponsor-logo">Sponsor 06</div>
-                <div class="gg-sponsor-logo">Sponsor 07</div>
-                <div class="gg-sponsor-logo">Sponsor 08</div>
-                <!-- Duplicated for seamless loop -->
-                <div class="gg-sponsor-logo">Sponsor 01</div>
-                <div class="gg-sponsor-logo">Sponsor 02</div>
-                <div class="gg-sponsor-logo">Sponsor 03</div>
-                <div class="gg-sponsor-logo">Sponsor 04</div>
-                <div class="gg-sponsor-logo">Sponsor 05</div>
-                <div class="gg-sponsor-logo">Sponsor 06</div>
-                <div class="gg-sponsor-logo">Sponsor 07</div>
-                <div class="gg-sponsor-logo">Sponsor 08</div>
-            </div>
-        </section>
-
-        
-
-        <!-- ══════════════════════════════
-             MODELS SCROLL  (Left → Right)
-             Images loaded directly from local files.
-             Replace src paths with your actual image paths.
-        ══════════════════════════════ -->
-        <section id="models" class="gg-gallery-section dark" aria-labelledby="models-heading">
-            <div class="gg-gallery-header gg-reveal">
-                <span class="gg-section-label">Eco Fashion Walk</span>
-                <h2 id="models-heading">Featured Models</h2>
-                <div class="gg-section-divider" aria-hidden="true"></div>
-            </div>
-
-            <div class="gg-gallery-track-outer" aria-label="Scrolling model showcase">
-                <div class="gg-gallery-track ltr">
-                    <!-- ── 20 MODEL CARDS – replace src with your local paths ── -->
-                    <!-- e.g. src="./assets/images/models/model-01.jpg" -->
-                    <article class="gg-person-card">
-                        <div class="gg-card-shimmer" aria-hidden="true"></div>
-                        <img src="./assets/images/img/bg/gals.png" alt="Model 1 – Glamour Gatherings Eco Fashion Walk" loading="lazy">
-                        <div class="gg-person-overlay"><span class="gg-person-name">Ananya R.</span><span class="gg-person-role">Model</span></div>
-                    </article>
-                    <article class="gg-person-card">
-                        <div class="gg-card-shimmer" aria-hidden="true"></div>
-                        <img src="./assets/images/img/bg/gals.png" alt="Model 2 – Glamour Gatherings" loading="lazy">
-                        <div class="gg-person-overlay"><span class="gg-person-name">Divya M.</span><span class="gg-person-role">Model</span></div>
-                    </article>
-                    <article class="gg-person-card">
-                        <div class="gg-card-shimmer" aria-hidden="true"></div>
-                        <img src="./assets/images/img/bg/gals.png" alt="Model 3 – Glamour Gatherings" loading="lazy">
-                        <div class="gg-person-overlay"><span class="gg-person-name">Priya S.</span><span class="gg-person-role">Model</span></div>
-                    </article>
-                    <article class="gg-person-card">
-                        <div class="gg-card-shimmer" aria-hidden="true"></div>
-                        <img src="./assets/images/models/model-04.jpg" alt="Model 4 – Glamour Gatherings" loading="lazy">
-                        <div class="gg-person-overlay"><span class="gg-person-name">Kavya T.</span><span class="gg-person-role">Model</span></div>
-                    </article>
-                    <article class="gg-person-card">
-                        <div class="gg-card-shimmer" aria-hidden="true"></div>
-                        <img src="./assets/images/models/model-05.jpg" alt="Model 5 – Glamour Gatherings" loading="lazy">
-                        <div class="gg-person-overlay"><span class="gg-person-name">Saranya K.</span><span class="gg-person-role">Model</span></div>
-                    </article>
-                    <article class="gg-person-card">
-                        <div class="gg-card-shimmer" aria-hidden="true"></div>
-                        <img src="./assets/images/models/model-06.jpg" alt="Model 6 – Glamour Gatherings" loading="lazy">
-                        <div class="gg-person-overlay"><span class="gg-person-name">Meena L.</span><span class="gg-person-role">Model</span></div>
-                    </article>
-                    <article class="gg-person-card">
-                        <div class="gg-card-shimmer" aria-hidden="true"></div>
-                        <img src="./assets/images/models/model-07.jpg" alt="Model 7 – Glamour Gatherings" loading="lazy">
-                        <div class="gg-person-overlay"><span class="gg-person-name">Nithya J.</span><span class="gg-person-role">Model</span></div>
-                    </article>
-                    <article class="gg-person-card">
-                        <div class="gg-card-shimmer" aria-hidden="true"></div>
-                        <img src="./assets/images/models/model-08.jpg" alt="Model 8 – Glamour Gatherings" loading="lazy">
-                        <div class="gg-person-overlay"><span class="gg-person-name">Rani P.</span><span class="gg-person-role">Model</span></div>
-                    </article>
-                    <article class="gg-person-card">
-                        <div class="gg-card-shimmer" aria-hidden="true"></div>
-                        <img src="./assets/images/models/model-09.jpg" alt="Model 9 – Glamour Gatherings" loading="lazy">
-                        <div class="gg-person-overlay"><span class="gg-person-name">Lavanya V.</span><span class="gg-person-role">Model</span></div>
-                    </article>
-                    <article class="gg-person-card">
-                        <div class="gg-card-shimmer" aria-hidden="true"></div>
-                        <img src="./assets/images/models/model-10.jpg" alt="Model 10 – Glamour Gatherings" loading="lazy">
-                        <div class="gg-person-overlay"><span class="gg-person-name">Geetha B.</span><span class="gg-person-role">Model</span></div>
-                    </article>
-                    <!-- ── Duplicate set for seamless infinite loop ── -->
-                    <article class="gg-person-card">
-                        <div class="gg-card-shimmer" aria-hidden="true"></div>
-                        <img src="./assets/images/models/model-11.jpg" alt="Model 11 – Glamour Gatherings" loading="lazy">
-                        <div class="gg-person-overlay"><span class="gg-person-name">Sindhu A.</span><span class="gg-person-role">Model</span></div>
-                    </article>
-                    <article class="gg-person-card">
-                        <div class="gg-card-shimmer" aria-hidden="true"></div>
-                        <img src="./assets/images/models/model-12.jpg" alt="Model 12 – Glamour Gatherings" loading="lazy">
-                        <div class="gg-person-overlay"><span class="gg-person-name">Rekha C.</span><span class="gg-person-role">Model</span></div>
-                    </article>
-                    <article class="gg-person-card">
-                        <div class="gg-card-shimmer" aria-hidden="true"></div>
-                        <img src="./assets/images/models/model-13.jpg" alt="Model 13 – Glamour Gatherings" loading="lazy">
-                        <div class="gg-person-overlay"><span class="gg-person-name">Uma D.</span><span class="gg-person-role">Model</span></div>
-                    </article>
-                    <article class="gg-person-card">
-                        <div class="gg-card-shimmer" aria-hidden="true"></div>
-                        <img src="./assets/images/models/model-14.jpg" alt="Model 14 – Glamour Gatherings" loading="lazy">
-                        <div class="gg-person-overlay"><span class="gg-person-name">Vani E.</span><span class="gg-person-role">Model</span></div>
-                    </article>
-                    <article class="gg-person-card">
-                        <div class="gg-card-shimmer" aria-hidden="true"></div>
-                        <img src="./assets/images/models/model-15.jpg" alt="Model 15 – Glamour Gatherings" loading="lazy">
-                        <div class="gg-person-overlay"><span class="gg-person-name">Mythili F.</span><span class="gg-person-role">Model</span></div>
-                    </article>
-                    <article class="gg-person-card">
-                        <div class="gg-card-shimmer" aria-hidden="true"></div>
-                        <img src="./assets/images/models/model-16.jpg" alt="Model 16 – Glamour Gatherings" loading="lazy">
-                        <div class="gg-person-overlay"><span class="gg-person-name">Sudha G.</span><span class="gg-person-role">Model</span></div>
-                    </article>
-                    <article class="gg-person-card">
-                        <div class="gg-card-shimmer" aria-hidden="true"></div>
-                        <img src="./assets/images/models/model-17.jpg" alt="Model 17 – Glamour Gatherings" loading="lazy">
-                        <div class="gg-person-overlay"><span class="gg-person-name">Janani H.</span><span class="gg-person-role">Model</span></div>
-                    </article>
-                    <article class="gg-person-card">
-                        <div class="gg-card-shimmer" aria-hidden="true"></div>
-                        <img src="./assets/images/models/model-18.jpg" alt="Model 18 – Glamour Gatherings" loading="lazy">
-                        <div class="gg-person-overlay"><span class="gg-person-name">Kamala I.</span><span class="gg-person-role">Model</span></div>
-                    </article>
-                    <article class="gg-person-card">
-                        <div class="gg-card-shimmer" aria-hidden="true"></div>
-                        <img src="./assets/images/models/model-19.jpg" alt="Model 19 – Glamour Gatherings" loading="lazy">
-                        <div class="gg-person-overlay"><span class="gg-person-name">Padma J.</span><span class="gg-person-role">Model</span></div>
-                    </article>
-                    <article class="gg-person-card">
-                        <div class="gg-card-shimmer" aria-hidden="true"></div>
-                        <img src="./assets/images/models/model-20.jpg" alt="Model 20 – Glamour Gatherings" loading="lazy">
-                        <div class="gg-person-overlay"><span class="gg-person-name">Chitra K.</span><span class="gg-person-role">Model</span></div>
-                    </article>
-                </div>
-            </div>
-        </section>
-
-        <!-- ══════════════════════════════
-             MAKEUP ARTISTS SCROLL  (Right → Left)
-        ══════════════════════════════ -->
-        <section class="gg-gallery-section mid" aria-labelledby="mua-heading">
-            <div class="gg-gallery-header gg-reveal">
-                <span class="gg-section-label">Styling &amp; Beauty</span>
-                <h2 id="mua-heading">Makeup Artists</h2>
-                <div class="gg-section-divider" aria-hidden="true"></div>
-            </div>
-
-            <div class="gg-gallery-track-outer mid" aria-label="Scrolling makeup artist showcase">
-                <div class="gg-gallery-track rtl">
-                    <!-- ── 20 MAKEUP ARTIST CARDS – replace src with your local paths ── -->
-                    <!-- e.g. src="./assets/images/makeup/mua-01.jpg" -->
-                    <article class="gg-person-card">
-                        <div class="gg-card-shimmer" aria-hidden="true"></div>
-                        <img src="./assets/images/makeup/mua-01.jpg" alt="Makeup Artist 1 – Glamour Gatherings" loading="lazy">
-                        <div class="gg-person-overlay"><span class="gg-person-name">Sindhu A.</span><span class="gg-person-role">Makeup Artist</span></div>
-                    </article>
-                    <article class="gg-person-card">
-                        <div class="gg-card-shimmer" aria-hidden="true"></div>
-                        <img src="./assets/images/makeup/mua-02.jpg" alt="Makeup Artist 2 – Glamour Gatherings" loading="lazy">
-                        <div class="gg-person-overlay"><span class="gg-person-name">Rekha C.</span><span class="gg-person-role">Makeup Artist</span></div>
-                    </article>
-                    <article class="gg-person-card">
-                        <div class="gg-card-shimmer" aria-hidden="true"></div>
-                        <img src="./assets/images/makeup/mua-03.jpg" alt="Makeup Artist 3 – Glamour Gatherings" loading="lazy">
-                        <div class="gg-person-overlay"><span class="gg-person-name">Uma D.</span><span class="gg-person-role">Makeup Artist</span></div>
-                    </article>
-                    <article class="gg-person-card">
-                        <div class="gg-card-shimmer" aria-hidden="true"></div>
-                        <img src="./assets/images/makeup/mua-04.jpg" alt="Makeup Artist 4 – Glamour Gatherings" loading="lazy">
-                        <div class="gg-person-overlay"><span class="gg-person-name">Vani E.</span><span class="gg-person-role">Makeup Artist</span></div>
-                    </article>
-                    <article class="gg-person-card">
-                        <div class="gg-card-shimmer" aria-hidden="true"></div>
-                        <img src="./assets/images/makeup/mua-05.jpg" alt="Makeup Artist 5 – Glamour Gatherings" loading="lazy">
-                        <div class="gg-person-overlay"><span class="gg-person-name">Mythili F.</span><span class="gg-person-role">Makeup Artist</span></div>
-                    </article>
-                    <article class="gg-person-card">
-                        <div class="gg-card-shimmer" aria-hidden="true"></div>
-                        <img src="./assets/images/makeup/mua-06.jpg" alt="Makeup Artist 6 – Glamour Gatherings" loading="lazy">
-                        <div class="gg-person-overlay"><span class="gg-person-name">Sudha G.</span><span class="gg-person-role">Makeup Artist</span></div>
-                    </article>
-                    <article class="gg-person-card">
-                        <div class="gg-card-shimmer" aria-hidden="true"></div>
-                        <img src="./assets/images/makeup/mua-07.jpg" alt="Makeup Artist 7 – Glamour Gatherings" loading="lazy">
-                        <div class="gg-person-overlay"><span class="gg-person-name">Janani H.</span><span class="gg-person-role">Makeup Artist</span></div>
-                    </article>
-                    <article class="gg-person-card">
-                        <div class="gg-card-shimmer" aria-hidden="true"></div>
-                        <img src="./assets/images/makeup/mua-08.jpg" alt="Makeup Artist 8 – Glamour Gatherings" loading="lazy">
-                        <div class="gg-person-overlay"><span class="gg-person-name">Kamala I.</span><span class="gg-person-role">Makeup Artist</span></div>
-                    </article>
-                    <article class="gg-person-card">
-                        <div class="gg-card-shimmer" aria-hidden="true"></div>
-                        <img src="./assets/images/makeup/mua-09.jpg" alt="Makeup Artist 9 – Glamour Gatherings" loading="lazy">
-                        <div class="gg-person-overlay"><span class="gg-person-name">Padma J.</span><span class="gg-person-role">Makeup Artist</span></div>
-                    </article>
-                    <article class="gg-person-card">
-                        <div class="gg-card-shimmer" aria-hidden="true"></div>
-                        <img src="./assets/images/makeup/mua-10.jpg" alt="Makeup Artist 10 – Glamour Gatherings" loading="lazy">
-                        <div class="gg-person-overlay"><span class="gg-person-name">Chitra K.</span><span class="gg-person-role">Makeup Artist</span></div>
-                    </article>
-                    <!-- Duplicate set for seamless loop -->
-                    <article class="gg-person-card">
-                        <div class="gg-card-shimmer" aria-hidden="true"></div>
-                        <img src="./assets/images/makeup/mua-11.jpg" alt="Makeup Artist 11 – Glamour Gatherings" loading="lazy">
-                        <div class="gg-person-overlay"><span class="gg-person-name">Ananya R.</span><span class="gg-person-role">Makeup Artist</span></div>
-                    </article>
-                    <article class="gg-person-card">
-                        <div class="gg-card-shimmer" aria-hidden="true"></div>
-                        <img src="./assets/images/makeup/mua-12.jpg" alt="Makeup Artist 12 – Glamour Gatherings" loading="lazy">
-                        <div class="gg-person-overlay"><span class="gg-person-name">Divya M.</span><span class="gg-person-role">Makeup Artist</span></div>
-                    </article>
-                    <article class="gg-person-card">
-                        <div class="gg-card-shimmer" aria-hidden="true"></div>
-                        <img src="./assets/images/makeup/mua-13.jpg" alt="Makeup Artist 13 – Glamour Gatherings" loading="lazy">
-                        <div class="gg-person-overlay"><span class="gg-person-name">Priya S.</span><span class="gg-person-role">Makeup Artist</span></div>
-                    </article>
-                    <article class="gg-person-card">
-                        <div class="gg-card-shimmer" aria-hidden="true"></div>
-                        <img src="./assets/images/makeup/mua-14.jpg" alt="Makeup Artist 14 – Glamour Gatherings" loading="lazy">
-                        <div class="gg-person-overlay"><span class="gg-person-name">Kavya T.</span><span class="gg-person-role">Makeup Artist</span></div>
-                    </article>
-                    <article class="gg-person-card">
-                        <div class="gg-card-shimmer" aria-hidden="true"></div>
-                        <img src="./assets/images/makeup/mua-15.jpg" alt="Makeup Artist 15 – Glamour Gatherings" loading="lazy">
-                        <div class="gg-person-overlay"><span class="gg-person-name">Saranya K.</span><span class="gg-person-role">Makeup Artist</span></div>
-                    </article>
-                    <article class="gg-person-card">
-                        <div class="gg-card-shimmer" aria-hidden="true"></div>
-                        <img src="./assets/images/makeup/mua-16.jpg" alt="Makeup Artist 16 – Glamour Gatherings" loading="lazy">
-                        <div class="gg-person-overlay"><span class="gg-person-name">Meena L.</span><span class="gg-person-role">Makeup Artist</span></div>
-                    </article>
-                    <article class="gg-person-card">
-                        <div class="gg-card-shimmer" aria-hidden="true"></div>
-                        <img src="./assets/images/makeup/mua-17.jpg" alt="Makeup Artist 17 – Glamour Gatherings" loading="lazy">
-                        <div class="gg-person-overlay"><span class="gg-person-name">Nithya J.</span><span class="gg-person-role">Makeup Artist</span></div>
-                    </article>
-                    <article class="gg-person-card">
-                        <div class="gg-card-shimmer" aria-hidden="true"></div>
-                        <img src="./assets/images/makeup/mua-18.jpg" alt="Makeup Artist 18 – Glamour Gatherings" loading="lazy">
-                        <div class="gg-person-overlay"><span class="gg-person-name">Rani P.</span><span class="gg-person-role">Makeup Artist</span></div>
-                    </article>
-                    <article class="gg-person-card">
-                        <div class="gg-card-shimmer" aria-hidden="true"></div>
-                        <img src="./assets/images/makeup/mua-19.jpg" alt="Makeup Artist 19 – Glamour Gatherings" loading="lazy">
-                        <div class="gg-person-overlay"><span class="gg-person-name">Lavanya V.</span><span class="gg-person-role">Makeup Artist</span></div>
-                    </article>
-                    <article class="gg-person-card">
-                        <div class="gg-card-shimmer" aria-hidden="true"></div>
-                        <img src="./assets/images/makeup/mua-20.jpg" alt="Makeup Artist 20 – Glamour Gatherings" loading="lazy">
-                        <div class="gg-person-overlay"><span class="gg-person-name">Geetha B.</span><span class="gg-person-role">Makeup Artist</span></div>
-                    </article>
                 </div>
             </div>
         </section>
@@ -1607,163 +900,6 @@
             <button type="submit" class="gg-btn" style="width:100%;">Pay &amp; Register</button>
         </form>
     </dialog>
-
-    <!-- ══════════════════════════════
-         SCRIPTS
-    ══════════════════════════════ -->
-    <script>
-        'use strict';
-
-        /* ── PRELOADER ── */
-        const preloader = document.getElementById('gg-preloader');
-        window.addEventListener('load', () => {
-            setTimeout(() => {
-                preloader.style.opacity = '0';
-                setTimeout(() => preloader.style.display = 'none', 700);
-            }, 1900);
-        });
-
-        /* ── MOBILE NAV ── */
-        const navToggle = document.querySelector('.gg-mobile-toggle');
-        const navMenu   = document.querySelector('.gg-nav-menu');
-
-        navToggle.addEventListener('click', () => {
-            const isOpen = navMenu.classList.toggle('active');
-            navToggle.innerHTML = isOpen
-                ? '<i class="fas fa-times" aria-hidden="true"></i>'
-                : '<i class="fas fa-bars" aria-hidden="true"></i>';
-            navToggle.setAttribute('aria-expanded', isOpen);
-        });
-
-        // Close mobile menu on link click
-        navMenu.querySelectorAll('a').forEach(link => {
-            link.addEventListener('click', () => {
-                navMenu.classList.remove('active');
-                navToggle.innerHTML = '<i class="fas fa-bars" aria-hidden="true"></i>';
-                navToggle.setAttribute('aria-expanded', 'false');
-            });
-        });
-
-        /* ── NAV SCROLL ── */
-        const nav          = document.querySelector('.gg-nav');
-        const scrollTopBtn = document.getElementById('scrollTop');
-
-        window.addEventListener('scroll', () => {
-            const y = window.scrollY;
-            nav.classList.toggle('scrolled', y > 50);
-            scrollTopBtn.classList.toggle('visible', y > 400);
-        }, { passive: true });
-
-        scrollTopBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
-
-        /* ── HERO SLIDER ── */
-        const slides   = document.querySelectorAll('.gg-slide');
-        const dots     = document.querySelectorAll('.gg-dot');
-        const prevBtn  = document.getElementById('prev-slide');
-        const nextBtn  = document.getElementById('next-slide');
-        let current    = 0;
-        let autoTimer  = null;
-
-        function showSlide(idx) {
-            slides[current].classList.remove('active');
-            dots[current].classList.remove('active');
-            dots[current].setAttribute('aria-selected', 'false');
-
-            current = ((idx % slides.length) + slides.length) % slides.length;
-
-            slides[current].classList.add('active');
-            dots[current].classList.add('active');
-            dots[current].setAttribute('aria-selected', 'true');
-        }
-
-        function startAuto()   { autoTimer = setInterval(() => showSlide(current + 1), 5500); }
-        function resetAuto()   { clearInterval(autoTimer); startAuto(); }
-
-        nextBtn.addEventListener('click', () => { showSlide(current + 1); resetAuto(); });
-        prevBtn.addEventListener('click', () => { showSlide(current - 1); resetAuto(); });
-        dots.forEach(d => d.addEventListener('click', (e) => {
-            showSlide(parseInt(e.currentTarget.dataset.index, 10)); resetAuto();
-        }));
-
-        document.querySelector('.gg-hero-slider').addEventListener('mouseenter', () => clearInterval(autoTimer));
-        document.querySelector('.gg-hero-slider').addEventListener('mouseleave', startAuto);
-        startAuto();
-
-        /* ── COUNTDOWN ── */
-        const TARGET = new Date('2026-03-02T09:00:00');
-        function pad(n) { return String(n).padStart(2,'0'); }
-
-        function tick() {
-            const diff = TARGET - Date.now();
-            if (diff <= 0) return;
-            document.getElementById('days').textContent    = pad(Math.floor(diff / 86400000));
-            document.getElementById('hours').textContent   = pad(Math.floor((diff % 86400000) / 3600000));
-            document.getElementById('minutes').textContent = pad(Math.floor((diff % 3600000) / 60000));
-            document.getElementById('seconds').textContent = pad(Math.floor((diff % 60000) / 1000));
-        }
-        tick();
-        setInterval(tick, 1000);
-
-        /* ── FORM SUBMIT HANDLER ── */
-        function handleFormSubmit(e, msg) {
-            e.preventDefault();
-            const dialog = e.target.closest('dialog');
-            dialog.close();
-            // Show a luxurious toast notification
-            showToast(msg);
-        }
-
-        function showToast(msg) {
-            const t = document.createElement('div');
-            t.textContent = msg;
-            Object.assign(t.style, {
-                position: 'fixed', bottom: '2rem', left: '50%',
-                transform: 'translateX(-50%) translateY(20px)',
-                background: 'linear-gradient(135deg,#501122,#004a41)',
-                color: '#fffef7', padding: '1rem 2rem',
-                borderRadius: '50px', fontSize: '0.88rem',
-                letterSpacing: '1px', zIndex: '9998',
-                boxShadow: '0 8px 30px rgba(0,0,0,0.5)',
-                opacity: '0', transition: 'all 0.4s ease',
-                fontFamily: "'Jost', sans-serif"
-            });
-            document.body.appendChild(t);
-            requestAnimationFrame(() => {
-                t.style.opacity = '1';
-                t.style.transform = 'translateX(-50%) translateY(0)';
-            });
-            setTimeout(() => {
-                t.style.opacity = '0';
-                setTimeout(() => t.remove(), 500);
-            }, 3000);
-        }
-
-        /* ── Close dialog on backdrop click ── */
-        document.querySelectorAll('dialog').forEach(d => {
-            d.addEventListener('click', e => {
-                if (e.target === d) d.close();
-            });
-        });
-
-        /* ── SCROLL REVEAL ── */
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('active');
-                    observer.unobserve(entry.target);
-                }
-            });
-        }, { threshold: 0.12 });
-
-        document.querySelectorAll('.gg-reveal, .gg-reveal-stagger').forEach(el => observer.observe(el));
-
-        /* ── SMOOTH SCROLL ── */
-        document.querySelectorAll('a[href^="#"]').forEach(a => {
-            a.addEventListener('click', function(e) {
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) { e.preventDefault(); target.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
-            });
-        });
-    </script>
+    <script src="./assets/js/main.js"></script>
 </body>
 </html>
