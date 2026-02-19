@@ -114,7 +114,7 @@
             font-size: 0.75rem;
             letter-spacing: 4px;
             text-transform: uppercase;
-            color: var(--gg-accent);
+            color: var(--gg-eco-light);
             margin-bottom: 1rem;
             font-weight: 600;
         }
@@ -212,6 +212,17 @@
             cursor: pointer; transition: var(--gg-transition); border-radius: 2px;
         }
         .gg-btn-outline:hover { background: var(--gg-accent); color: var(--gg-black); border-color: var(--gg-accent); }
+.gg-btn-outline1 {
+            display: inline-flex; align-items: center; justify-content: center;
+            gap: 0.8rem;
+            padding: 0.9rem 2.2rem;
+            background: var(--platinum);
+            border: 1px solid rgba(191,165,168,0.4);
+            color: var(--gg-accent);
+            font-size: 0.85rem; letter-spacing: 1.5px; text-transform: uppercase;
+            cursor: pointer; transition: var(--gg-transition); border-radius: 2px;
+        }
+        .gg-btn-outline1:hover { background: var(--gg-accent); color: var(--gg-black); border-color: var(--gg-accent); }
 
         /* ==========================================================================
            4. PRELOADER
@@ -504,8 +515,10 @@
             gap: 2rem; margin-top: 3rem;
         }
         .gg-role-card {
-            background: linear-gradient(145deg, #121212, #0a0a0a); padding: 3rem 2rem;
-            text-align: center; border: 1px solid rgba(255,255,255,0.05);
+            background: linear-gradient(145deg, var(--secondary-light),var(--primary-dark));
+             /* linear-gradient(145deg, #121212, #0a0a0a); */
+             padding: 3rem 2rem;
+            text-align: center; border: 1px solid var(--charcoal);
             border-radius: 4px; transition: var(--gg-transition); position: relative;
             display: flex; flex-direction: column; align-items: center; gap: 1.5rem;
         }
@@ -517,12 +530,12 @@
         .gg-role-card:hover { border-color: var(--gg-primary); box-shadow: 0 10px 40px rgba(80,17,34,0.1); }
         .gg-role-card:hover::before { opacity: 1; }
 
-        .gg-role-icon { font-size: 2.5rem; color: var(--gg-accent); }
+        .gg-role-icon { font-size: 2.5rem; color: var(--ivory); }
         .gg-role-card h3 { font-size: 1.5rem; color: var(--gg-white); margin: 0; }
-        .gg-role-card p { font-size: 0.9rem; color: #888; margin-bottom: 1rem; }
+        .gg-role-card p { font-size: 0.9rem; color: var(--ivory); margin-bottom: 1rem; }
         .gg-tickets-badge {
             font-size: 0.7rem; letter-spacing: 2px; text-transform: uppercase;
-            color: var(--gg-eco-light); border: 1px solid rgba(14,124,113,0.3);
+            color: var(--platinum); border: 1px solid rgba(14,124,113,0.3);
             border-radius: 50px; padding: 0.4rem 1rem;
         }
 
@@ -661,9 +674,12 @@
 
         .gg-cta-section {
             position: relative; padding: 8rem 0; text-align: center;
-            background: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.8)),
-                        url('https://images.unsplash.com/photo-1492684223066-81342ee5ff30?q=80&w=2070&auto=format&fit=crop') center/cover no-repeat fixed;
+            /* background: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.8)),
+                        url('.//') center/cover no-repeat fixed; */
         }
+        /* .gg-cta-content p{
+            color: var(--ivory);
+        } */
         .gg-cta-section::before {
             content: ''; position: absolute; inset: 0;
             /* background: radial-gradient(ellipse at center, var(--glow-teal) 0%, transparent 60%); pointer-events: none; */
@@ -748,6 +764,12 @@
                 position: fixed; top: var(--gg-header-height); left: 0; right: 0;
                 background: rgba(0,0,0,0.98); flex-direction: column; padding: 3rem 5%;
                 transform: translateY(-150%); transition: transform 0.4s ease; border-bottom: 1px solid #222;
+            }
+            .gg-meta-item{
+                padding: 10px;
+            }
+            .gg-slide-content{
+                /* height: 120vh; */
             }
             .gg-nav-menu.active { transform: translateY(0); }
             .gg-mobile-toggle { display: flex; align-items: center; justify-content: center; }
